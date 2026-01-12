@@ -1,0 +1,16 @@
+12/28/2012
+	5 1U servers X9SCL-F CPU Xeon E3-1230 V2; Memory DDR3-1600 8G ECC (Single Dimm); Intel 520 Series 120G SSD SATA  $920 each
+
+
+1/7/2014
+
+Supermicro Servers
+SN: 7D5020007051, 7D5020006977, 7D5020006964, 7D5020007207, 7D5020007092   $1400 each
+
+
+4/28/2014
+	11 e3-1230 servers  $1440 each
+	
+	
+2/26/2015 
+	2 4U servers $8999 each

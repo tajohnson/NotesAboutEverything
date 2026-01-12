@@ -1,0 +1,9 @@
+- [ ] Accepts email as an attachment.  Metadta in the body tells what to do with the message.
+	- [ ] amavisd needs to send message as an attachment.
+	- [ ] check out how do_quarantine handles this.  Creates a new message, sets all the header, and then copies the body over to do it.  Possible to use this? Could it write it to a temporary file, and then we attach that temporary file to a new message?
+- [ ] Maybe just one simple address for this, like "retain@s3.mailroute.net".  Or maybe something different? Can postifx send to a different relay based on the sender? Can it send mail2s3+ksdjfksjdf@... to one place and retain@ to another?
+	- [ ] postfix-deliver currrently has 
+		- transport_maps = inline:{*=smtp:[127.0.0.1]:10008}
+		- change to a transport map?
+		- 
+- [ ] Eventually, get rid of mail2s3 and use this instead for quarantine and continuity.  This way we can develop this stand-alone, and when it's done, adjust the code in custom hook to use this new code t

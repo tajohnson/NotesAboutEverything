@@ -1,0 +1,1 @@
+ssh -L 587:remote.mroute.net:587 -L 993:remote.mroute.net:993 root@remote.mroute.net -L 25:remote.mroute.net:25

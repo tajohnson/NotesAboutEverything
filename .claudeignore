@@ -1,0 +1,2 @@
+# Sensitive files CC should never read
+Private/

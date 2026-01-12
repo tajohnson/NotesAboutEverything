@@ -1,0 +1,1 @@
+ grep postfix-relaycust ./postfix-gw-20161015  | grep relay=none | awk '{printf $5 " " }{for(i=10;i<=NF;i++){printf $i " "}; printf "\n"}'  | sort | uniq

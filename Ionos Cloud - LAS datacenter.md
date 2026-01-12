@@ -1,0 +1,90 @@
+
+
+https://dcd.ionos.com
+
+
+install alma9 image
+
+Go to console
+
+```
+
+useradd  -g 500 -u 500 tj 
+
+passwd tj
+
+   
+   
+   
+echo "PermitRootLogin yes" > /etc/ssh/sshd_config.d/01-permitrootlogin.conf
+
+echo "PasswordAuthentication yes" > /etc/ssh/sshd_config.d/50-cloud-init.conf
+
+systemctl restart sshd
+
+
+vi /etc/passwd - change tj to 500
+vi /etc/group - change tj to 500
+
+cat <<EOF > ~root/.ssh/id_rsa.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDl5hi2xwDVh2zJbZoWsuSzDIQLy5eEN5U/NhfX2jQShZ4ak3PW7IEEPigi9HlB/wDhWVL0L0rAb6/8qlq7KxxTj4QWci5vMl2hbtZRoga1AqLUZqyfHaO6amf6bDwQM8baLpGB6G8VdrmiKZH3e3rTz6PWiTg6ki5gX9pfrYl8Bce7kY28ZdmzqanJETrDw+hoUvT9ymtMlF6ag0hOMXorCW4OoAVwVTWgshXDhjKJcEw98evBbBIYyvCTWb5shGAoRxiYGoYfGqO2c121WnEUaDbk9zvGqyHxC4MgV+KIqeJ1QtzhPH5xQb0n2g39qOurkbEnkezydkY9UPdztnTwEVIp1Kh9BUJJszeJm9/L9JCQwCTcn6fauXharyiPA+g3cS7Fj7fzrFDeTfwFKaEiVKLquagnIH8QL/hFr+ggmpabW9Of4kLEMpcN5pQyyIVjY4lcJh4cHvTdMOkZpTkkXuMHHfPUgifml9q77v5D5nc8+A9sR6UVCib9YZAnIy0= root@es01.lax.mailroute.net
+EOF
+
+cat <<EOF > ~root/.ssh/id_rsa
+-----BEGIN OPENSSH PRIVATE KEY-----
+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
+-----END OPENSSH PRIVATE KEY-----
+EOF
+
+chmod 600 ~root/.ssh/id_rsa*
+
+
+ssh-copy-id root@199.89.1.15
+ssh-copy-id root@199.89.1.4
+ssh-copy-id root@010.lax.mailroute.net
+
+
+
+
+From es01
+ssh-copy-id root@199.89.4.X
+
+
+```
+
+

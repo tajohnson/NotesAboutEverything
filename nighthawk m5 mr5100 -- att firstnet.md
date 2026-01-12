@@ -1,0 +1,19 @@
+Model MR5100-1A1NAS
+	IMEI: 015564000419596   (0155 64 000 419 596)
+	MAC: 80CC9CBED9D9
+	
+
+SIM card
+	SKU  6376B
+	UPC: 07376 61000
+	
+	8901 1004 3000 5469 3628
+	
+	
+Firstnet account:
+	bridgetjohnson98@gmail.com
+	Kate8Kate!!
+	424-445-7516
+	billing acct #337187302502
+	
+	2022-01-09 - Unlock Request number: CUL214041484258

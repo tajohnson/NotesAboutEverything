@@ -1,0 +1,131 @@
+TODO - archiving
+
+
+
+Thought - start with ONLY o365.
+
+
+Mail flow
+	o365 journal rule.  Sends email to a specific address (one per customer, perhaps?)
+	the email that's sent has a mime attachment message/rfc822 that contains the original email
+	So we need to extract that, and then deliver it to the user's actual mailbox.
+
+	postfix-archive - do this as a variation of the current postfix-deliver? maybe or maybe not
+		check to see if legit address - mailfrom is the admin email that's set, so can use that too
+			Return-Path: <o365archiveadmin@terramar.net>
+			Delivered-To: o365archive@terramar.net
+
+	postfix pipe delivery agent - perl.  Strips out message/rfc822 attachment, parses out necessary headers, and adds it to elastic search.  This is in process on s02.lax in ~tj/archive/
+	
+	
+
+
+	
+	
+
+
+
+Numbers - just for the hell of it.
+June 2019
+	delivered (clean or spammy) 29,126,650 emails
+	total size: 4265913371927 bytes  - that's about 3.9TB of mail.  Not bad.
+	
+	12 month archive - 46.8TB in 348Million emails
+	84 month archive - 327.6TB 2.44 billion emails
+	
+	Current elasticsearch for log searching has 1.25billion records, about 0.85TB in size
+	
+	
+	
+domains
+	mailroutearchive.com - registered
+	mailroutearchive.cloud - registered
+	mrarchive.online - registered
+	mrarchive.cloud - registered
+	mrarchive.net	 - registered
+	
+	
+	
+	
+	
+	
+	
+proof of concept of postfix delivery agent:
+
+
+use strict;
+use MIME::Parser;
+use Data::Dumper;
+use Search::Elasticsearch;
+
+
+
+my $parser = new MIME::Parser;
+#$parser->extract_nested_messages(0);
+$parser->extract_nested_messages(1);
+$parser->output_to_core(1);		 # No temporary files
+$parser->decode_headers(1);
+my $entity = $parser->parse(\*STDIN);
+
+my $found=0;
+# Loop recursing deeper until we find a message/rfc822 part.
+my @check_parts = $entity->parts;
+
+while (!$found) {
+	foreach my $subent (@check_parts) {
+		if ($subent->effective_type eq "message/rfc822") {
+			# create a new mime parser to parse out this message so we can store away some specific info for searching
+			my $p = MIME::Parser->new;
+        		my $e = $p->parse_data($subent->stringify_body);
+	
+			my $header = $e->head;
+			#print Dumper $header;
+        		my $from = $header->get_all("From");
+        		my $msg_id = $header->get("message-id");
+        		my $to = $header->get_all("To");
+        		my $date = $header->get("date");
+        		my $subject = $header->get("subject");
+        		my $returnpath= $header->get("return-path");
+
+			# need to generate some sort of signature that guarantees that this message that arrives is never modified.
+			# Something that is perhaps tied to the server, the date and timestamp.  Something that shows the message
+			# is immutabe
+        		#print "From: ". Dumper($from);
+        		#print "Message-id:  $msg_id";
+        		#print "To: $to";
+        		#print "Date: $date";
+        		#print "Subject: $subject";
+	
+			my $body = $subent->stringify_body;
+			$body =~ s/\n*$/\n\n/;
+			#print $body;
+
+            # Connect to localhost:9200:
+            my $elastic = Search::Elasticsearch->new();
+		
+            $elastic->index(
+                index   => 'emailarchive',
+                type    => 'email',
+                #id      => 1,
+                body    => {
+                    from => $from,
+                    to => $to,
+                    date    => $date,
+                    message_id => $msg_id,
+                    subject => $suubject,
+                    return_path => $return_path,
+                    content =>  $body
+                }
+            );
+
+			$found++;
+		}
+	}
+	if (!$found) {
+		@check_parts = map { $_->parts; } @check_parts;
+		last if ! @check_parts;
+	}
+}
+
+
+	
