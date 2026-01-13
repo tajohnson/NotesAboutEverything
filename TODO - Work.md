@@ -107,10 +107,60 @@ After upgrades:
 - [ ] Migrate servers 010, s01, s02 to alma9 (remaining)
 - [ ] Get p0f working again (requires transparent mode in haproxy)
 - [ ] Change ES shards to 4, replica to 1 on new cluster
-- [ ] Reserved instances for AWS (after quarantine shut down)
+- [x] Reserved instances for AWS (after quarantine shut down)
 - [ ] move redis to aws instance or some other hosted service? Same with memcached?  Or use a bare metal server somewhere else for this?
 - [ ] Move qa, dev databases to new, separate aws instances, for ease of snapshotting, backup/restore
 - [ ] memcached - run separately in each datacenter - only used for caching recipient accss verification info
+
+---
+
+## Infrastructure Projects
+
+### Netdata Monitoring
+Spec: `20-NETDATA-MONITORING.md` | Status: Phases 1-4.8 complete
+- [ ] Policyd custom monitoring (charts.d plugin)
+- [ ] Stalwart IMAP custom monitoring (charts.d plugin)
+- [ ] Unbound monitoring (go.d/unbound - depends on Unbound deployment)
+
+### HAProxy Capacity Weights
+Spec: `30-HAPROXY-CAPACITY-WEIGHTS.md` | Status: Ready to implement
+- [ ] Replace static HAProxy weights with capacity-based weights from server hardware (physical_cores)
+- [ ] Extend lb_all dictionary with capacity info
+- [ ] Update haproxy.cfg.j2 template to calculate weights automatically
+
+### IP Warmup Strategy
+Spec: `31-IP-WARMUP-STRATEGY.md` | Status: Architecture defined
+- [ ] Implement two-tier relay architecture (separate filtering from delivery)
+- [ ] Configure HAProxy weights on delivery pool for IP warmup control
+- [ ] Apply to 005.mia, 006.mia, 009.lax, 012.lax, 008.lax
+
+### Architecture Documentation
+Spec: `40-ARCHITECTURE-DOCUMENTATION.md` | Status: Phase 1 in progress (ARCH-00-OVERVIEW complete)
+- [ ] ARCH-01: Infrastructure (datacenters, servers, network)
+- [ ] ARCH-02: Email Flow (filtering pipeline)
+- [ ] ARCH-03: Load Balancing (HAProxy, keepalived)
+- [ ] ARCH-04: DNS (BIND, zones, DNSBL)
+- [ ] ARCH-05: Databases (Aurora, Redis, memcached)
+- [ ] ARCH-06: Security (auth, encryption, secrets)
+- [ ] ARCH-07: Monitoring (Netdata, ELK, alerting)
+
+### MkDocs Knowledge Base Migration
+Spec: `50-MKDOCS-KB-MIGRATION.md` | Status: Planning complete
+- [ ] Phase 1: Ansible deployment (nginx serving static files)
+- [ ] Phase 2: GitHub repo + MkDocs setup + GitHub Actions CI/CD
+- [ ] Phase 3: Zendesk export (Python script, HTML→Markdown)
+- [ ] Phase 4: Content reorganization
+- [ ] Phase 5: Theming & branding
+- [ ] Phase 6: Go live
+
+### Quarantine Retention Bypass
+Spec: `50-QUARANTINE-RETENTION-BYPASS.md` | Status: Planned
+- [ ] Skip S3 storage when retention_quarantine = 0 (Education plans, FERPA compliance)
+
+### Unbound Local Caching
+Spec: `50-UNBOUND-LOCAL-CACHING.md` | Status: Ready for implementation
+- [ ] Deploy Unbound as local caching DNS on non-BIND servers (load balancers, search, IMAP)
+- [ ] Configure forwarding to central BIND servers
 
 ---
 
